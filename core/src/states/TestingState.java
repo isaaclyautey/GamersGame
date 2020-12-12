@@ -17,6 +17,11 @@ import manager.state.State;
 import manager.state.StateController;
 import util.Version;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 public class TestingState extends State{
 	
 	private ShapeRenderer shapeRenderer;
@@ -31,8 +36,8 @@ public class TestingState extends State{
 	
 	private SpriteBatch entityBatch = new SpriteBatch();
 	private BitmapFont entityFont = new BitmapFont();
-	
-	private Entity player;
+
+	private HashMap<String, List<Entity>> entities;
 
 	public TestingState(StateController stateController) {
 		super(stateController);
@@ -48,14 +53,14 @@ public class TestingState extends State{
 
 		this.shapeRenderer = new ShapeRenderer();
 		
-		//lights 
-//		rayHandler = new RayHandler(world); 
-//		rayHandler.setAmbientLight(1f);
-//		rayHandler.setShadows(true);
-//		rayHandler.setBlurNum(6);
-		
-		player = new Player(world,0,0,25,25,shapeRenderer);
+		//lights
+		rayHandler = new RayHandler(world);
+		rayHandler.setAmbientLight(1f);
+		rayHandler.setShadows(true);
+		rayHandler.setBlurNum(6);
 
+		entities = new HashMap<>();
+		entities.put("PLAYER", Arrays.<Entity>asList(new Player(world,0,0,25,25,shapeRenderer)));
 	}
 
 	@Override
@@ -70,16 +75,16 @@ public class TestingState extends State{
 
 	@Override
 	public void update() {
-		player.update();
-		
-		
-		
+		for(String s : entities.keySet())
+			for(Entity e : entities.get(s))
+				e.update();;
+
 		this.stepWorld();
 	}
 
 	private void stepWorld() {
 		world.step(Gdx.graphics.getDeltaTime(), 5, 2);
-//		rayHandler.update();
+		rayHandler.update();
 	}
 	
 	@Override
@@ -87,14 +92,17 @@ public class TestingState extends State{
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		entityBatch.setProjectionMatrix(camera.combined);
 		
-		
 		shapeRenderer.begin(ShapeType.Filled);
-		player.render();
+
+		for(String s : entities.keySet())
+			for(Entity e : entities.get(s))
+				e.render();;
+
 		shapeRenderer.end();
 		
 		//lights
-//		rayHandler.setCombinedMatrix(camera.combined.cpy().scl(Version.PPM));
-//		rayHandler.render();
+		rayHandler.setCombinedMatrix(camera.combined.cpy().scl(Version.PPM));
+		rayHandler.render();
 		
 		batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 25, Gdx.graphics.getHeight()-25);
