@@ -63,7 +63,6 @@ public class Player extends Entity {
 		}
 		
 		body.setLinearVelocity(moveVector);
-		
 	}
 
 	@Override
@@ -89,7 +88,7 @@ public class Player extends Entity {
 
 	@Override
 	public String getType() {
-		return "PLAYER";
+		return this.getClass().getSimpleName().toUpperCase();
 	}
 
 }

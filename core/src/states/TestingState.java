@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 import box2dLight.RayHandler;
+import entity.BasicEnemy;
 import entity.Entity;
 import manager.state.State;
 import manager.state.StateController;
@@ -38,7 +39,7 @@ public class TestingState extends State{
 	private SpriteBatch entityBatch = new SpriteBatch();
 	private BitmapFont entityFont = new BitmapFont();
 
-	private HashMap<String, List<Entity>> entities;
+	private HashMap<String, List<? extends Entity>> entities;
 
 	public TestingState(StateController stateController) {
 		super(stateController);
@@ -62,8 +63,12 @@ public class TestingState extends State{
 
 		entities = new HashMap<>();
 		TileMap map = MapCreator.generateSquareMap(world, shapeRenderer, 25, 25, 50, 50);
-		entities.put(Version.ENTITY_TYPE_PLAYER, Arrays.asList(map.getPlayer()));
-		entities.put(Version.ENTITY_TYPE_WALL, map.getWalls());
+		entities.put(map.getPlayer().getClass().getSimpleName(), Arrays.asList(map.getPlayer()));
+		var walls = map.getWalls();
+		entities.put(walls.get(0).getClass().getSimpleName(), walls);
+		var testEnemy = Arrays.asList(new BasicEnemy(world,250,250,25,25,shapeRenderer));
+		entities.put(testEnemy.get(0).getClass().getSimpleName(), testEnemy);
+		System.out.println(testEnemy.get(0).getClass().getSimpleName());
 	}
 
 	@Override
@@ -79,9 +84,7 @@ public class TestingState extends State{
 	@Override
 	public void update() {
 		camera.position.set(GeneralUtil.lerpMoveCamera(.1f, camera.position, entities.get(Version.ENTITY_TYPE_PLAYER).get(0).getPosition(true)));
-        
-		
-		
+
 		for(String s : entities.keySet())
 			for(Entity e : entities.get(s))
 				e.update();
@@ -107,7 +110,6 @@ public class TestingState extends State{
 				e.render();;
 
 		entities.keySet().forEach(s->entities.get(s).forEach(Entity::render));
-
 
 		shapeRenderer.end();
 		

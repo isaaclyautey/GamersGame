@@ -25,7 +25,6 @@ public class MapCreator {
 		for(int i = 0; i < height; i++) {
 			walls.add(new Wall(world, 0, tileHeight*i, tileWidth, tileHeight, shapeRenderer, Color.GRAY));
 			walls.add(new Wall(world, tileWidth*(width-1), tileHeight*i, tileWidth, tileHeight, shapeRenderer, Color.GRAY));
-			
 		}
 		
 		TileMap map = new TileMap();

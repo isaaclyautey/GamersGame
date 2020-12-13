@@ -68,7 +68,7 @@ public class Wall extends Entity {
 
 	@Override
 	public String getType() {
-		return null;
+		return this.getClass().getSimpleName().toUpperCase();
 	}
 
 }
