@@ -107,7 +107,6 @@ public class TestingState extends State{
 		batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 25, Gdx.graphics.getHeight()-25);
         batch.end();
-		
 	}
 
 	@Override
