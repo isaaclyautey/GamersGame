@@ -98,6 +98,9 @@ public class TestingState extends State{
 			for(Entity e : entities.get(s))
 				e.render();;
 
+		entities.keySet().forEach(s->entities.get(s).forEach(Entity::render));
+
+
 		shapeRenderer.end();
 		
 		//lights
