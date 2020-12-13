@@ -1,5 +1,9 @@
 package states;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,15 +16,12 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import box2dLight.RayHandler;
 import entity.Entity;
-import entity.Player;
 import manager.state.State;
 import manager.state.StateController;
+import map.MapCreator;
+import map.TileMap;
+import util.GeneralUtil;
 import util.Version;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 public class TestingState extends State{
 	
@@ -60,7 +61,9 @@ public class TestingState extends State{
 		rayHandler.setBlurNum(6);
 
 		entities = new HashMap<>();
-		entities.put("PLAYER", Arrays.<Entity>asList(new Player(world,0,0,25,25,shapeRenderer)));
+		TileMap map = MapCreator.generateSquareMap(world, shapeRenderer, 25, 25, 50, 50);
+		entities.put(Version.ENTITY_TYPE_PLAYER, Arrays.asList(map.getPlayer()));
+		entities.put(Version.ENTITY_TYPE_WALL, map.getWalls());
 	}
 
 	@Override
@@ -75,10 +78,15 @@ public class TestingState extends State{
 
 	@Override
 	public void update() {
+		camera.position.set(GeneralUtil.lerpMoveCamera(.1f, camera.position, entities.get(Version.ENTITY_TYPE_PLAYER).get(0).getPosition(true)));
+        
+		
+		
 		for(String s : entities.keySet())
 			for(Entity e : entities.get(s))
-				e.update();;
+				e.update();
 
+		camera.update();
 		this.stepWorld();
 	}
 
@@ -107,10 +115,12 @@ public class TestingState extends State{
 		rayHandler.setCombinedMatrix(camera.combined.cpy().scl(Version.PPM));
 		rayHandler.render();
 		
+		//collisions and box2d render
+//		boxRender.render(world, camera.combined.cpy().scl(Version.PPM));
+		
 		batch.begin();
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 25, Gdx.graphics.getHeight()-25);
         batch.end();
-		
 	}
 
 	@Override
