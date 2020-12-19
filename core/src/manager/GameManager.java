@@ -20,8 +20,7 @@ public class GameManager {
 		stateController.render();
 		stateController.renderText();
 	}
-	
-	
+
 	public void dispose() {
 		stateController.dispose();
 	}

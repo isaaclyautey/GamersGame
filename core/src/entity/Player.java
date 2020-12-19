@@ -46,22 +46,26 @@ public class Player extends Entity {
 	protected void checkInput() {
 		float moveSpeed = 1f;
 		Vector2 moveVector = new Vector2(0,0);
-		
+
+		// Sprint key
 		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
 			moveSpeed = 2.5f;
-		
+
+		// Y-directional keys
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
 			moveVector.y = moveSpeed;
 		} else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 			moveVector.y = -moveSpeed;
 		}
-		
+
+		// X-directional keys
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
 			moveVector.x = -moveSpeed;
 		} else if(Gdx.input.isKeyPressed(Input.Keys.D)) {
 			moveVector.x = moveSpeed;
 		}
-		
+
+		// Apply velocity changes
 		body.setLinearVelocity(moveVector);
 	}
 
